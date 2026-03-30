@@ -23,6 +23,7 @@ function Layout() {
     getMe().then((res) => setUser(res.data)).catch(() => { localStorage.removeItem("token"); navigate("/login"); });
   }, [navigate]);
 
+  
   useEffect(() => {
     if (!user) return;
     const fetchUnread = async () => { try { const res = await getUnreadCount(); setUnreadCount(res.data.unread); } catch (e) {} };

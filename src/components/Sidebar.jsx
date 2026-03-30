@@ -1,14 +1,14 @@
 import { NavLink, useNavigate } from "react-router-dom";
 
 const menuItems = [
-  { path: "/app", icon: "📊", label: "Dashboard", end: true },
-  { path: "/app/projects", icon: "📁", label: "Projects" },
-  { path: "/app/tasks", icon: "✅", label: "My Tasks" },
-  { path: "/app/calendar", icon: "📅", label: "Calendar" },
-  { path: "/app/meet", icon: "💬", label: "Meet", key: "meet" },
-  { path: "/app/teams", icon: "👥", label: "Teams" },
-  { path: "/app/reports", icon: "📈", label: "Reports" },
-  { path: "/app/settings", icon: "⚙️", label: "Settings" },
+  { path: "/app", icon: "/assets/dashboard.png", label: "Dashboard", end: true },
+  { path: "/app/projects", icon: "/assets/folder.png", label: "Projects" },
+  { path: "/app/tasks", icon: "/assets/check.png", label: "My Tasks" },
+  { path: "/app/calendar", icon: "/assets/calendar.png", label: "Calendar" },
+  { path: "/app/meet", icon: "/assets/meet.png", label: "Meet", key: "meet" },
+  { path: "/app/teams", icon: "/assets/group.png", label: "Teams" },
+  { path: "/app/reports", icon: "/assets/reports.png", label: "Reports" },
+  { path: "/app/settings", icon: "/assets/setting.png", label: "Settings" },
 ];
 
 function Sidebar({ workspaceName, unreadCount, hasMultipleWorkspaces, onSwitchClick }) {
@@ -30,7 +30,13 @@ function Sidebar({ workspaceName, unreadCount, hasMultipleWorkspaces, onSwitchCl
       <nav className="sidebar-nav">
         {menuItems.map((item) => (
           <NavLink key={item.path} to={item.path} end={item.end} className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}>
-            <span className="sidebar-icon">{item.icon}</span>
+            <span className="sidebar-icon">
+              {item.icon.startsWith("/") ? (
+                <img src={item.icon} alt={item.label} className="sidebar-icon-img" />
+              ) : (
+                item.icon
+              )}
+            </span>
             <span>{item.label}</span>
             {item.key === "meet" && unreadCount > 0 && (
               <span className="sidebar-badge">{unreadCount > 99 ? "99+" : unreadCount}</span>
@@ -40,7 +46,7 @@ function Sidebar({ workspaceName, unreadCount, hasMultipleWorkspaces, onSwitchCl
       </nav>
       <div className="sidebar-footer">
         <button className="sidebar-logout" onClick={() => { localStorage.removeItem("token"); navigate("/login"); }}>
-          🚪 Logout
+           Logout
         </button>
       </div>
     </aside>

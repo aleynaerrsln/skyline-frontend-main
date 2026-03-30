@@ -114,7 +114,12 @@ body {
   width: 24px;
   text-align: center;
 }
-
+.sidebar-icon-img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  display: block;
+}
 .sidebar-badge {
   margin-left: auto;
   background: #ff6b6b;
