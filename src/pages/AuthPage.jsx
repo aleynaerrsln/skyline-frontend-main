@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { login, register } from "../services/api";
+import { User, Lock, Mail, Monitor } from "lucide-react";
 import "./AuthPage.css";
 
 function AuthPage() {
   const location = useLocation();
-  const [isRegister, setIsRegister] = useState(location.pathname === "/register");
+  const [toggled, setToggled] = useState(location.pathname === "/register");
   const navigate = useNavigate();
 
   // Login state
@@ -23,14 +24,6 @@ function AuthPage() {
   });
   const [regError, setRegError] = useState("");
   const [regLoading, setRegLoading] = useState(false);
-
-  const handleLoginChange = (e) => {
-    setLoginForm({ ...loginForm, [e.target.name]: e.target.value });
-  };
-
-  const handleRegChange = (e) => {
-    setRegForm({ ...regForm, [e.target.name]: e.target.value });
-  };
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -62,162 +55,143 @@ function AuthPage() {
     }
   };
 
-  const toggleMode = (e) => {
+  const goToRegister = (e) => {
     e.preventDefault();
     setLoginError("");
+    setToggled(true);
+  };
+
+  const goToLogin = (e) => {
+    e.preventDefault();
     setRegError("");
-    setIsRegister(!isRegister);
+    setToggled(false);
   };
 
   return (
     <div className="auth-page-wrapper">
-      <div className={`auth-card ${isRegister ? "register-mode" : ""}`}>
-        {/* ===== FORM PANELS ===== */}
-        <div className="auth-panels">
-          {/* Login Form - Left */}
-          <div className="auth-form-panel login-panel">
-            <h1 className="auth-form-title">Login</h1>
-            {loginError && <div className="auth-error-msg">{loginError}</div>}
-            <form onSubmit={handleLoginSubmit}>
-              <div className="auth-input-group">
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  value={loginForm.email}
-                  onChange={handleLoginChange}
-                  required
-                />
-                <span className="input-icon">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
-                </span>
-              </div>
-              <div className="auth-input-group">
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={loginForm.password}
-                  onChange={handleLoginChange}
-                  required
-                />
-                <span className="input-icon">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                  </svg>
-                </span>
-              </div>
-              <div className="auth-forgot-link">
-                <a href="/forgot-password">Forgot password?</a>
-              </div>
-              <button className="auth-submit-btn" type="submit" disabled={loginLoading}>
+      <div className={`auth-wrapper ${toggled ? "toggled" : ""}`}>
+        <div className="background-shape" />
+        <div className="secondary-shape" />
+
+        {/* ===== LOGIN PANEL (Left) ===== */}
+        <div className="credentials-panel signin">
+          <h2 className="slide-element">Login</h2>
+          {loginError && <div className="auth-error-msg slide-element">{loginError}</div>}
+          <form onSubmit={handleLoginSubmit}>
+            <div className="field-wrapper slide-element">
+              <input
+                type="email"
+                name="email"
+                placeholder="Username"
+                value={loginForm.email}
+                onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
+                required
+              />
+              <span className="field-icon"><User size={20} /></span>
+            </div>
+
+            <div className="field-wrapper slide-element">
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={loginForm.password}
+                onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
+                required
+              />
+              <span className="field-icon"><Lock size={20} /></span>
+            </div>
+
+            <div className="slide-element">
+              <button className="submit-button" type="submit" disabled={loginLoading}>
                 {loginLoading ? "Signing in..." : "Login"}
               </button>
-            </form>
-            <div className="auth-switch-text">
-              Don't have an account?
-              <a onClick={toggleMode} href="#">Sign Up</a>
             </div>
-          </div>
 
-          {/* Register Form - Right */}
-          <div className="auth-form-panel register-panel">
-            <h1 className="auth-form-title">Register</h1>
-            {regError && <div className="auth-error-msg">{regError}</div>}
-            <form onSubmit={handleRegSubmit}>
-              <div className="auth-input-group">
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Name"
-                  value={regForm.name}
-                  onChange={handleRegChange}
-                  required
-                />
-                <span className="input-icon">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
-                  </svg>
-                </span>
-              </div>
-              <div className="auth-input-group">
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  value={regForm.email}
-                  onChange={handleRegChange}
-                  required
-                />
-                <span className="input-icon">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2" y="4" width="20" height="16" rx="2" />
-                    <path d="M22 4L12 13 2 4" />
-                  </svg>
-                </span>
-              </div>
-              <div className="auth-input-group">
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={regForm.password}
-                  onChange={handleRegChange}
-                  minLength={6}
-                  required
-                />
-                <span className="input-icon">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                  </svg>
-                </span>
-              </div>
-              <div className="auth-input-group">
-                <input
-                  type="text"
-                  name="workspaceName"
-                  placeholder="Workspace Name"
-                  value={regForm.workspaceName}
-                  onChange={handleRegChange}
-                  required
-                />
-                <span className="input-icon">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2" y="3" width="20" height="14" rx="2" />
-                    <path d="M8 21h8" />
-                    <path d="M12 17v4" />
-                  </svg>
-                </span>
-              </div>
-              <button className="auth-submit-btn" type="submit" disabled={regLoading}>
+            <div className="switch-link slide-element">
+              <p>Don't have an account? <br /> <a href="#" onClick={goToRegister}>Sign Up</a></p>
+            </div>
+          </form>
+        </div>
+
+        {/* ===== WELCOME - Login side (Right) ===== */}
+        <div className="welcome-section signin">
+          <h2 className="slide-element">WELCOME<br />BACK!</h2>
+        </div>
+
+        {/* ===== REGISTER PANEL (Right) ===== */}
+        <div className="credentials-panel signup">
+          <h2 className="slide-element">Register</h2>
+          {regError && <div className="auth-error-msg slide-element">{regError}</div>}
+          <form onSubmit={handleRegSubmit} autoComplete="off">
+            <div className="field-wrapper slide-element">
+              <input
+                type="text"
+                name="reg-name"
+                placeholder="Username"
+                autoComplete="off"
+                value={regForm.name}
+                onChange={(e) => setRegForm({ ...regForm, name: e.target.value })}
+                required
+              />
+              <span className="field-icon"><User size={20} /></span>
+            </div>
+
+            <div className="field-wrapper slide-element">
+              <input
+                type="text"
+                name="reg-workspace"
+                placeholder="Workspace Name"
+                autoComplete="off"
+                value={regForm.workspaceName}
+                onChange={(e) => setRegForm({ ...regForm, workspaceName: e.target.value })}
+                required
+              />
+              <span className="field-icon"><Monitor size={20} /></span>
+            </div>
+
+            <div className="field-wrapper slide-element">
+              <input
+                type="email"
+                name="reg-email"
+                placeholder="Email"
+                autoComplete="off"
+                value={regForm.email}
+                onChange={(e) => setRegForm({ ...regForm, email: e.target.value })}
+                required
+              />
+              <span className="field-icon"><Mail size={20} /></span>
+            </div>
+
+            <div className="field-wrapper slide-element">
+              <input
+                type="password"
+                name="reg-password"
+                placeholder="Password"
+                autoComplete="new-password"
+                value={regForm.password}
+                onChange={(e) => setRegForm({ ...regForm, password: e.target.value })}
+                minLength={6}
+                required
+              />
+              <span className="field-icon"><Lock size={20} /></span>
+            </div>
+
+            <div className="slide-element">
+              <button className="submit-button" type="submit" disabled={regLoading}>
                 {regLoading ? "Creating..." : "Register"}
               </button>
-            </form>
-            <div className="auth-switch-text">
-              Already have an account?
-              <a onClick={toggleMode} href="#">Sign In</a>
             </div>
-          </div>
+
+            <div className="switch-link slide-element">
+              <p>Already have an account? <br /> <a href="#" onClick={goToLogin}>Sign In</a></p>
+            </div>
+          </form>
         </div>
 
-        {/* ===== DIAGONAL OVERLAYS ===== */}
-        <div className="auth-overlay">
-          <div className="auth-overlay-shape shape-login" />
-          <div className="auth-overlay-shape shape-register" />
-        </div>
-
-        {/* ===== WELCOME TEXTS ===== */}
-        <div className="auth-welcome welcome-login">
-          <h2>WELCOME<br />BACK!</h2>
-        </div>
-        <div className="auth-welcome welcome-register">
-          <h2>WELCOME!</h2>
+        {/* ===== WELCOME - Register side (Left) ===== */}
+        <div className="welcome-section signup">
+          <h2 className="slide-element">WELCOME!</h2>
         </div>
       </div>
     </div>
