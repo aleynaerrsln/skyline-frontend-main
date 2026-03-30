@@ -1,0 +1,345 @@
+/* ===== AUTH PAGE - ANIMATED LOGIN/REGISTER ===== */
+
+.auth-page-wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0e1a;
+  overflow: hidden;
+}
+
+.auth-card {
+  position: relative;
+  width: 900px;
+  height: 520px;
+  border: 2px solid #00e5ff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    0 0 30px rgba(0, 229, 255, 0.15),
+    0 0 60px rgba(0, 229, 255, 0.05),
+    inset 0 0 30px rgba(0, 229, 255, 0.03);
+  background: #0d1127;
+}
+
+/* ===== PANELS (Form Areas) ===== */
+
+.auth-panels {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.auth-form-panel {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 50px 45px;
+  transition: all 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Login panel - left side */
+.auth-form-panel.login-panel {
+  left: 0;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.auth-card.register-mode .auth-form-panel.login-panel {
+  opacity: 0;
+  transform: translateX(-100%);
+  pointer-events: none;
+}
+
+/* Register panel - right side */
+.auth-form-panel.register-panel {
+  right: 0;
+  opacity: 0;
+  transform: translateX(100%);
+  pointer-events: none;
+}
+
+.auth-card.register-mode .auth-form-panel.register-panel {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: all;
+}
+
+/* ===== FORM STYLES ===== */
+
+.auth-form-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 40px;
+  font-style: italic;
+  letter-spacing: 1px;
+}
+
+.auth-input-group {
+  position: relative;
+  margin-bottom: 28px;
+}
+
+.auth-input-group input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 10px 40px 10px 5px;
+  font-size: 15px;
+  color: #fff;
+  outline: none;
+  transition: border-color 0.3s;
+  font-family: inherit;
+}
+
+.auth-input-group input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+}
+
+.auth-input-group input:focus {
+  border-bottom-color: #00e5ff;
+}
+
+.auth-input-group .input-icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 18px;
+  pointer-events: none;
+}
+
+.auth-submit-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  border: 2px solid #00e5ff;
+  border-radius: 50px;
+  background: linear-gradient(135deg, #00b4d8, #00e5ff, #00b4d8);
+  color: #0d1127;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+  text-transform: capitalize;
+}
+
+.auth-submit-btn:hover {
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.auth-submit-btn:active {
+  transform: translateY(0);
+}
+
+.auth-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.auth-switch-text {
+  text-align: center;
+  margin-top: 24px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+}
+
+.auth-switch-text a {
+  color: #00e5ff;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  display: block;
+  margin-top: 4px;
+}
+
+.auth-switch-text a:hover {
+  text-decoration: underline;
+}
+
+.auth-error-msg {
+  background: rgba(255, 50, 50, 0.15);
+  border: 1px solid rgba(255, 50, 50, 0.3);
+  color: #ff6b6b;
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ===== DIAGONAL OVERLAY ===== */
+
+.auth-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.auth-overlay-shape {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transition: all 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Login mode: diagonal covers the RIGHT side only */
+.auth-overlay-shape.shape-login {
+  right: 0;
+  left: auto;
+  background: linear-gradient(135deg, #00c9db 0%, #00e5ff 30%, #0891b2 70%, #00b4d8 100%);
+  clip-path: polygon(35% 0%, 100% 0%, 100% 100%, 0% 100%);
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.auth-card.register-mode .auth-overlay-shape.shape-login {
+  transform: translateX(110%);
+  opacity: 0;
+}
+
+/* Register mode: diagonal covers the LEFT side only */
+.auth-overlay-shape.shape-register {
+  left: 0;
+  right: auto;
+  background: linear-gradient(225deg, #00c9db 0%, #00e5ff 30%, #0891b2 70%, #00b4d8 100%);
+  clip-path: polygon(0% 0%, 65% 0%, 50% 100%, 0% 100%);
+  opacity: 0;
+  transform: translateX(-110%);
+}
+
+.auth-card.register-mode .auth-overlay-shape.shape-register {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* ===== WELCOME TEXT ===== */
+
+.auth-welcome {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.auth-welcome h2 {
+  color: #fff;
+  font-size: 44px;
+  font-weight: 900;
+  text-align: center;
+  line-height: 1.2;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+  letter-spacing: 2px;
+}
+
+/* Login mode welcome - right side */
+.auth-welcome.welcome-login {
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.auth-card.register-mode .auth-welcome.welcome-login {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+/* Register mode welcome - left side */
+.auth-welcome.welcome-register {
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
+.auth-card.register-mode .auth-welcome.welcome-register {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ===== FORGOT PASSWORD LINK ===== */
+.auth-forgot-link {
+  text-align: right;
+  margin-top: -16px;
+  margin-bottom: 8px;
+}
+
+.auth-forgot-link a {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 12px;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.auth-forgot-link a:hover {
+  color: #00e5ff;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 768px) {
+  .auth-card {
+    width: 95%;
+    height: auto;
+    min-height: 520px;
+    flex-direction: column;
+  }
+
+  .auth-form-panel {
+    width: 100%;
+    padding: 40px 30px;
+  }
+
+  .auth-overlay {
+    display: none;
+  }
+
+  .auth-welcome {
+    display: none;
+  }
+
+  .auth-form-panel.register-panel {
+    position: relative;
+    right: auto;
+  }
+
+  .auth-card.register-mode .auth-form-panel.login-panel {
+    display: none;
+  }
+
+  .auth-card.register-mode .auth-form-panel.register-panel {
+    opacity: 1;
+    transform: none;
+    pointer-events: all;
+  }
+}
